@@ -22,19 +22,30 @@ const (
 	POSITION_NEW
 )
 
+type CallbackFunc func() error
+
 type Application struct {
+	Name string
+	Host string
+	Port int64
+	// 全局请求超时
+	// RequestTimeout   int64
+	// ReadTimeout      int64
+	// WriteTimeout     int64
 	Config           *config.Config
 	LoadConfig       func() error
 	SetupVars        func() error
-	RegisterCallback map[CallbackPosition]func() error
+	RegisterCallback map[CallbackPosition]CallbackFunc
 }
 
-func New(appConfig *Application) *Application {
-	return &Application{}
-}
-
-var Mysql MysqlConn
+var ApplicationInstance *Application
 
 type MysqlConn interface {
 	Get(ctx context.Context) *gorm.DB
 }
+
+var Mysql MysqlConn
+
+type RedisConn interface{}
+
+var Redis RedisConn
