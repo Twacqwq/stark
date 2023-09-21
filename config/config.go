@@ -1,7 +1,5 @@
 package config
 
-import "github.com/spf13/viper"
-
 type Config struct {
 	Name string
 	Host string
@@ -18,29 +16,6 @@ var config *Config
 
 func Get() *Config {
 	return config
-}
-
-func Load(paths ...string) error {
-	if len(paths) != 0 {
-		for _, path := range paths {
-			viper.SetConfigFile(path)
-		}
-	}
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.SetConfigType("json")
-	viper.AddConfigPath("./local")
-	viper.AddConfigPath("./config")
-
-	if err := viper.ReadInConfig(); err != nil {
-		return err
-	}
-
-	if err := viper.Unmarshal(&config); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 type MysqlConfig struct {

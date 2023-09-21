@@ -13,7 +13,7 @@ var (
 )
 
 func New(app *stark.Application) (*stark.Application, error) {
-	stark.ApplicationInstance = app
+	// stark.ApplicationInstance = app
 	if app.Name == "" {
 		return nil, errors.New("application name can't not be empty")
 	}
