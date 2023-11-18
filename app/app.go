@@ -5,7 +5,6 @@ import (
 	"flag"
 
 	"github.com/FarmerChillax/stark"
-	"github.com/FarmerChillax/stark/module"
 )
 
 var (
@@ -28,35 +27,43 @@ func New(app *stark.Application) (*stark.Application, error) {
 		if err != nil {
 			return nil, err
 		}
-
-		err = runLoadConfigCallback(app.RegisterCallback)
-		if err != nil {
+		// 执行加载配置回调操作
+		// err = runLoadConfigCallback(stark.POSITION_LOAD_CONFIG,app.RegisterCallback)
+		if err := runCallback(stark.POSITION_LOAD_CONFIG, app.RegisterCallback); err != nil {
+			return nil, err
+		}
+	}
+	// 设置常量
+	if app.SetupVars != nil {
+		if err := app.SetupVars(); err != nil {
+			return nil, err
+		}
+		// 执行设置常量的回调操作
+		if err := runCallback(stark.POSITION_SETUP_VARS, app.RegisterCallback); err != nil {
 			return nil, err
 		}
 	}
 
-	// 加载全局组件
-	// 初始化 mysql 链接
-	if app.Config.Mysql != nil {
-		err := module.RegisterMysql(app)
+	// 注册内置组件
+	if app.RegisterModule != nil {
+		err := app.RegisterModule()
 		if err != nil {
+			return nil, err
+		}
+		if err := runCallback(stark.POSITION_MODULE, app.RegisterCallback); err != nil {
 			return nil, err
 		}
 	}
 
-	// 初始化 redis 链接
-	if app.Config.Redis != nil {
-		err := module.RegisterRedis(app)
-		if err != nil {
-			return nil, err
-		}
+	if err := runCallback(stark.POSITION_NEW, app.RegisterCallback); err != nil {
+		return nil, err
 	}
 
-	return &stark.Application{}, nil
+	return app, nil
 }
 
-func runLoadConfigCallback(callbacks map[stark.CallbackPosition]stark.CallbackFunc) error {
-	if f, ok := callbacks[stark.POSITION_LOAD_CONFIG]; ok {
+func runCallback(position stark.CallbackPosition, callbacks map[stark.CallbackPosition]stark.CallbackFunc) error {
+	if f, ok := callbacks[position]; ok {
 		return f()
 	}
 

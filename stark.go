@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/FarmerChillax/stark/config"
+	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
@@ -21,6 +22,8 @@ const (
 	POSITION_SETUP_VARS
 	// 调用 New 方法后
 	POSITION_NEW
+	// 调用 RegisterModule 后
+	POSITION_MODULE
 )
 
 type CallbackFunc func() error
@@ -36,7 +39,10 @@ type Application struct {
 	Config           *config.Config
 	LoadConfig       func() error
 	SetupVars        func() error
+	RegisterModule   func() error
 	RegisterCallback map[CallbackPosition]CallbackFunc
+	RegisterRouter   func(*gin.Engine) error
+	engine           *gin.Engine
 }
 
 // var ApplicationInstance *Application
@@ -52,39 +58,3 @@ type RedisConn interface {
 }
 
 var Redis RedisConn
-
-// type Config struct {
-// 	Name string
-// 	Host string
-// 	Port int32
-// 	// 全局请求超时
-// 	RequestTimeout int64
-// 	ReadTimeout    int64
-// 	WriteTimeout   int64
-// 	Mysql          *MysqlConfig `json:"mysql,omitempty"`
-// 	Redis          *RedisConfig `json:"redis,omitempty"`
-// }
-
-// type MysqlConfig struct {
-// 	Dsn               string `json:"dsn,omitempty"`
-// 	Username          string `json:"username,omitempty"`
-// 	Password          string `json:"password,omitempty"`
-// 	Host              string `json:"host,omitempty"`
-// 	Port              int32  `json:"port,omitempty"`
-// 	DBName            string `json:"db_name,omitempty" mapstructure:"db_name"`
-// 	Charset           string `json:"charset,omitempty"`
-// 	Loc               string `json:"loc,omitempty"`
-// 	ParseTime         string `json:"parse_time,omitempty"`
-// 	Timeout           int64  `json:"timeout,omitempty"`
-// 	MaxOpen           int    `json:"max_open,omitempty"`
-// 	MaxIdle           int    `json:"max_idle,omitempty"`
-// 	ConnMaxLifeSecond int    `json:"conn_max_life_second,omitempty"`
-// }
-
-// type RedisConfig struct {
-// 	Addr     string
-// 	Password string
-// 	DB       int
-// 	PoolSize int
-// 	MaxIdle  int
-// }

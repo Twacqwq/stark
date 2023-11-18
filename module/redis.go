@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/FarmerChillax/stark"
-	"github.com/FarmerChillax/stark/pkg/utils"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,9 +15,6 @@ func (rc *redisConn) Get(ctx context.Context) *redis.Client {
 	return rc.client
 }
 
-func RegisterRedis(app *stark.Application) error {
-	redisConf := app.Config.Redis
-	rdb := utils.NewRedis(redisConf)
+func RegisterRedis(rdb *redis.Client) {
 	stark.Redis = &redisConn{client: rdb}
-	return nil
 }
