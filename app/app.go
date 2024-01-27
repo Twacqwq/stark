@@ -33,6 +33,9 @@ func New(app *stark.Application) (*stark.Application, error) {
 			return nil, err
 		}
 	}
+
+	// 初始化日志
+
 	// 设置常量
 	if app.SetupVars != nil {
 		if err := app.SetupVars(); err != nil {

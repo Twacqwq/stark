@@ -33,9 +33,6 @@ type Application struct {
 	Host string
 	Port int64
 	// 全局请求超时
-	// RequestTimeout   int64
-	// ReadTimeout      int64
-	// WriteTimeout     int64
 	Config           *config.Config
 	LoadConfig       func() error
 	SetupVars        func() error
@@ -47,11 +44,11 @@ type Application struct {
 
 // var ApplicationInstance *Application
 
-type MysqlConn interface {
+type DatabaseIface interface {
 	Get(ctx context.Context) *gorm.DB
 }
 
-var Mysql MysqlConn
+var Database DatabaseIface
 
 type RedisConn interface {
 	Get(ctx context.Context) *redis.Client
