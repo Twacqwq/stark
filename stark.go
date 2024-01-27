@@ -55,3 +55,23 @@ type RedisConn interface {
 }
 
 var Redis RedisConn
+
+type LoggerIface interface {
+	// debug 日志
+	// Debug(ctx context.Context, args ...interface{})
+	// Debugf(ctx context.Context, format string, args ...interface{})
+
+	// 普通日志
+	Info(ctx context.Context, args ...interface{})
+	Infof(ctx context.Context, format string, args ...interface{})
+
+	// 警告日志
+	Warn(ctx context.Context, args ...interface{})
+	Warnf(ctx context.Context, format string, args ...interface{})
+
+	// 错误日志
+	Error(ctx context.Context, args ...interface{})
+	Errorf(ctx context.Context, format string, args ...interface{})
+}
+
+var Logger LoggerIface

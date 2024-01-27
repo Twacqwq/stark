@@ -5,6 +5,8 @@ import (
 	"flag"
 
 	"github.com/FarmerChillax/stark"
+	"github.com/FarmerChillax/stark/config"
+	"github.com/FarmerChillax/stark/internal/xlog"
 )
 
 var (
@@ -35,6 +37,7 @@ func New(app *stark.Application) (*stark.Application, error) {
 	}
 
 	// 初始化日志
+	xlog.InitGlobalLogger(config.GetLoggerConfig())
 
 	// 设置常量
 	if app.SetupVars != nil {

@@ -1,5 +1,7 @@
 package config
 
+import "github.com/sirupsen/logrus"
+
 type Config struct {
 	ApplicationName string
 	Host            string
@@ -10,6 +12,7 @@ type Config struct {
 	WriteTimeout   int64
 	Database       *DatabseConfig `json:"mysql,omitempty"`
 	Redis          *RedisConfig   `json:"redis,omitempty"`
+	Logger         *LoggerConfig  `json:"logger,omitempty"`
 }
 
 var config *Config
@@ -49,4 +52,13 @@ func GetRedis() *RedisConfig {
 	// 	return &defaultRedisConfig
 	// }
 	return config.Redis
+}
+
+type LoggerConfig struct {
+	Formatter logrus.Formatter
+	RootPath  string
+}
+
+func GetLoggerConfig() *LoggerConfig {
+	return config.Logger
 }
