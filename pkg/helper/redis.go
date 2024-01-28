@@ -5,7 +5,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func NewRedis(redisConfig *config.RedisConfig) *redis.Client {
+func NewRedis(redisConfig *config.RedisConfig) (*redis.Client, error) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:         redisConfig.Addr,
 		Password:     redisConfig.Password,
@@ -13,5 +13,6 @@ func NewRedis(redisConfig *config.RedisConfig) *redis.Client {
 		PoolSize:     redisConfig.PoolSize,
 		MaxIdleConns: redisConfig.MaxIdle,
 	})
-	return rdb
+
+	return rdb, nil
 }

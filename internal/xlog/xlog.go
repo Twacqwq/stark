@@ -13,7 +13,7 @@ type logger struct {
 	log *logrus.Logger
 }
 
-func InitGlobalLogger(loggerConf *config.LoggerConfig) {
+func Register(loggerConf *config.LoggerConfig) error {
 	if loggerConf.Formatter == nil {
 		loggerConf.Formatter = NewFormatter()
 	}
@@ -21,7 +21,18 @@ func InitGlobalLogger(loggerConf *config.LoggerConfig) {
 	stark.Logger = &logger{
 		log: l,
 	}
+	return nil
 }
+
+// func NewLogger(loggerConf *config.LoggerConfig) (*logger, error) {
+// 	if loggerConf.Formatter == nil {
+// 		loggerConf.Formatter = NewFormatter()
+// 	}
+// 	l := helper.NewLogger(loggerConf.Formatter)
+// 	return &logger{
+// 		log: l,
+// 	}, nil
+// }
 
 func (l *logger) Info(ctx context.Context, args ...interface{}) {
 	l.log.WithContext(ctx).Info(args...)

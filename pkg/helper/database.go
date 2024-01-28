@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func NewDB(conf *config.DatabseConfig) (*gorm.DB, error) {
+func NewGormDB(conf *config.DatabseConfig) (*gorm.DB, error) {
 	dial, err := getDialByDriver(conf.Driver, conf.Dsn)
 	if err != nil {
 		return nil, err

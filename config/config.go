@@ -1,18 +1,18 @@
 package config
 
-import "github.com/sirupsen/logrus"
+import (
+	"github.com/sirupsen/logrus"
+)
 
 type Config struct {
-	ApplicationName string
-	Host            string
-	Port            int32
 	// 全局请求超时
-	RequestTimeout int64
-	ReadTimeout    int64
-	WriteTimeout   int64
-	Database       *DatabseConfig `json:"mysql,omitempty"`
-	Redis          *RedisConfig   `json:"redis,omitempty"`
-	Logger         *LoggerConfig  `json:"logger,omitempty"`
+	Timeout int64
+	// RequestTimeout int64
+	// ReadTimeout    int64
+	// WriteTimeout   int64
+	Database *DatabseConfig `json:"mysql,omitempty" mapstructure:"database"`
+	Redis    *RedisConfig   `json:"redis,omitempty"`
+	Logger   *LoggerConfig  `json:"logger,omitempty"`
 }
 
 var config *Config
@@ -33,9 +33,11 @@ type DatabseConfig struct {
 }
 
 func GetDatabase() *DatabseConfig {
-	// if config.Mysql == nil {
-	// 	config.Mysql = &MysqlConfig{}
-	// }
+	if config.Database == nil {
+		config.Database = &DatabseConfig{
+			Driver: "sqlite3",
+		}
+	}
 	return config.Database
 }
 
@@ -60,5 +62,8 @@ type LoggerConfig struct {
 }
 
 func GetLoggerConfig() *LoggerConfig {
+	if config.Logger == nil {
+		config.Logger = &LoggerConfig{}
+	}
 	return config.Logger
 }
