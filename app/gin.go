@@ -54,7 +54,7 @@ func (app *Builder) ListenGinServer(ginApp *stark.GinApplication) error {
 		Handler: engine,
 	}
 	errChan := make(chan error)
-	stopChan := make(chan os.Signal)
+	stopChan := make(chan os.Signal, 1)
 	signal.Notify(stopChan, syscall.SIGTERM, syscall.SIGINT)
 	go func() {
 		ginApp.TracerLogger.Infof("Start http server listen on: %s .", addr)
