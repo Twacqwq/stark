@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	application, err := app.New(&stark.Application{
+	appBuilder, err := app.NewBuilder(&stark.Application{
 		Name: "app-demo",
 		Host: "0.0.0.0",
 		Port: 6000,
@@ -18,5 +18,5 @@ func main() {
 		log.Fatalln("app.New err: ", err)
 	}
 
-	fmt.Printf("%+v\n", application)
+	fmt.Printf("%+v\n", appBuilder)
 }

@@ -16,28 +16,11 @@ var (
 	port = flag.Int64("p", 5500, "Set server port.")
 )
 
-func validateAndMergeAppConfig(app *stark.Application) error {
-	if app.Name == "" {
-		return errors.New("application name can't not be empty")
-	}
-
-	flag.Parse()
-	if *port > 0 {
-		app.Port = *port
-	}
-
-	if app.Port > 65535 || app.Port < 0 {
-		return errors.New("invalid port")
-	}
-
-	if app.Host == "" {
-		app.Host = *host
-	}
-
-	return nil
+type Builder struct {
+	Application *stark.Application
 }
 
-func New(app *stark.Application) (*stark.Application, error) {
+func NewBuilder(app *stark.Application) (*Builder, error) {
 	// stark.ApplicationInstance = app
 	if err := validateAndMergeAppConfig(app); err != nil {
 		return nil, err
@@ -105,7 +88,30 @@ func New(app *stark.Application) (*stark.Application, error) {
 		return nil, err
 	}
 
-	return app, nil
+	return &Builder{
+		Application: app,
+	}, nil
+}
+
+func validateAndMergeAppConfig(app *stark.Application) error {
+	if app.Name == "" {
+		return errors.New("application name can't not be empty")
+	}
+
+	flag.Parse()
+	if *port > 0 {
+		app.Port = *port
+	}
+
+	if app.Port > 65535 || app.Port < 0 {
+		return errors.New("invalid port")
+	}
+
+	if app.Host == "" {
+		app.Host = *host
+	}
+
+	return nil
 }
 
 func runCallback(position stark.CallbackPosition, callbacks map[stark.CallbackPosition]stark.CallbackFunc) error {
